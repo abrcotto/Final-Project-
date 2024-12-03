@@ -112,10 +112,8 @@ def main():
     print("What viral tiktok meme am I??")
     scores = ask_questions()
     meme = determine_meme(scores)
-    print(f"You are this meme: {meme}!")
+    input(f"You are this meme: {meme}!")
 # Run the program
 
 
 main()
-
-# pls how do i put u on github
