@@ -1,10 +1,19 @@
-# Defining traits for each meme
-meme = {
-    "No Chick-fil-a sauce"
-    "In the clurb we all fam"
-    "Mamma a girl behind you"
-    "What I do"
+import cv2  # Import OpenCV
+
+# Defining meme traits and images
+meme_traits = {
+    "No Chick-fil-a sauce": "You're quick to judge .",
+    "In the clurb we all fam": "You love to have fun with friends.",
+    "Mamma a girl behind you": "You're supportive but",
+    "What I do": "You're cool, collected, and don't care what anyone thinks."
 }
+
+# Pathway to my meme images
+meme_images = {"No Chick-fil-a sauce": "no_chick_fila_sauce.jpg.jpg",
+               "In the clurb we all fam": "in_the_clurb.jpg.jpg",
+               "Mamma a girl behind you": "mamma_a_girl.jpg.jpg",
+               "What I do": "what_i_do.jpg.jpg"}
+
 # Define the questions and answer options
 questions = [
     {
@@ -46,7 +55,7 @@ questions = [
             "Listen to music": "Mamma a girl behind you",
             "Shopping": "What I do"
         }
-    },   
+    },
     {
         "question": "What would you do if you saw money on the ground?",
         "choices": ["Give it back", "Share it", "Tell the police", "Thats a lil to broke for me"],
@@ -86,14 +95,14 @@ def ask_questions():
         print(question["question"])
         for i, choice in enumerate(question["choices"], 1):
             print(f"{i}. {choice}")
-        # Get users input
+        # Get user's input
         while True:
             try:
                 answer_index = int(input("Choose your answer (1/2/3/4): ")) - 1
                 if 0 <= answer_index < len(question["choices"]):
                     answer = question["choices"][answer_index]
-                    meme = question["answers"][answer]
-                    scores[meme] += 1  # add points to memes
+                    meme_choice = question["answers"][answer]  # get the meme choice
+                    scores[meme_choice] += 1  # add points to meme
                     break
                 else:
                     print("Invalid choice, please choose a number between 1 and 4.")
@@ -103,16 +112,40 @@ def ask_questions():
 
 
 def determine_meme(scores):
-    # Sort the meme based off score 
-    what_meme = sorted(scores.items(), key=lambda item: item[1], reverse=True)
-    return what_meme[0][0]  # return the meme with the highest score
+    # Sort the memes based on score
+    sorted_memes = sorted(scores.items(), key=lambda item: item[1], reverse=True)
+    return sorted_memes[0][0]  # return the meme with the highest score
+
+
+def show_meme_image(meme_name):
+    # Load the meme image using OpenCV
+    meme_image_path = meme_images[meme_name]
+    meme_image = cv2.imread(meme_image_path)
+
+    if meme_image is None:
+        print("Error: Meme image not found.")
+        return
+
+    # Display the meme image in a window
+    cv2.imshow(f"Your Meme: {meme_name}", meme_image)
+
+    # Wait until any key is pressed
+    cv2.waitKey(0)
+
+    # Close the image window
+    cv2.destroyAllWindows()
 
 
 def main():
-    print("What viral tiktok meme am I??")
+    print("What viral TikTok meme are you?")
     scores = ask_questions()
     meme = determine_meme(scores)
-    input(f"You are this meme: {meme}!")
+    input(f"You are this meme: {meme}! Press enter for more")
+    input(f"Meme explanation: {meme_traits[meme]}Press enter for your imagae")
+
+    # Show the meme image.
+    show_meme_image(meme)
+
 # Run the program
 
 
